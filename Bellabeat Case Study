@@ -2,6 +2,8 @@
 
 # Checked for distinct values in DailyActivity
 
-```html
-SELECT DISTINCT Id FROM DailyActivity
+```sql
+// SELECT DISTINCT Id FROM DailyActivity
 ```
+
+# 
