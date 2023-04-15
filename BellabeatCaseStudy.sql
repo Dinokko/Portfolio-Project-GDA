@@ -97,6 +97,30 @@ SET IsManualReport = 'False'
 WHERE IsManualReport = '0'
 # Changes 0 to False
 
+-- Checking length of Id column in DailyActivity to ensure no Id's are longer or less than 10 characters:
+
+SELECT Id
+FROM DailyActivity
+WHERE LEN(Id) < 10
+OR LEN(Id) > 10
+# Returned none
+
+-- Checking length of Id column in WeightLogInfo to ensure no Id's are longer or less than 10 characters:
+
+SELECT Id
+FROM WeightLogInfo
+WHERE LEN(Id) < 10
+OR LEN(Id) > 10
+# Returned none
+
+-- Checking length of Id column in SleepLog to ensure no Id's are longer or less than 10 characters:
+
+SELECT Id
+FROM SleepLog
+WHERE LEN(Id) < 10
+OR LEN(Id) > 10
+# Returned none
+
 -- 
 
 
