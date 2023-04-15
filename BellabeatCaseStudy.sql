@@ -57,6 +57,46 @@ EXEC SP_RENAME 'SleepLog2', 'SleepLog';
 DROP TABLE IF EXISTS SleepLog2;
 # Deletes table
 
+-- Checking DailyActivity for zero step days:
+
+SELECT SUM(ZeroDays) AS numZeroDays
+FROM (
+	SELECT COUNT(*) AS ZeroDays
+	FROM DailyActivity
+	WHERE TotalSteps = 0
+) AS t
+# Returned 77 entries
+
+-- Checking other categories of days which had zero steps counted:
+
+SELECT *, ROUND((SedentaryMinutes / 60), 2) AS SedentaryHours
+FROM DailyActivity
+WHERE TotalSteps = 0
+# Returned many entries with 24 hours of no activity. Most likely due to the FitBit not being worn.
+
+-- Removing 0 step day rows from the table:
+
+DELETE 
+FROM DailyActivity
+WHERE TotalSteps = 0
+# Removed 77 rows
+
+-- Updating Boolean values in WeightLogInfo to True/False:
+
+ALTER TABLE WeightLogInfo
+ALTER COLUMN IsManualReport varchar(255);
+# Changed datatype from boolean to string
+
+UPDATE WeightLogInfo
+SET IsManualReport = 'True'
+WHERE IsManualReport = '1'
+# Changes 1 to True
+
+UPDATE WeightLogInfo
+SET IsManualReport = 'False'
+WHERE IsManualReport = '0'
+# Changes 0 to False
+
 -- 
 
 
