@@ -144,3 +144,32 @@ SELECT d.Id, ActivityDate, TotalMinutesAsleep, TotalSteps / 2000 AS DistanceTrav
 FROM DailyActivity AS d
 JOIN SleepLog AS s
 ON d.Id = s.Id AND ActivityDate = SleepDay
+
+-- Convert date format to day of week:
+
+SELECT ActivityDate, DATENAME(weekday, ActivityDate) AS DayOfWeek
+FROM DailyActivity;
+
+-- Splitting days into weekdays and weekend days:
+
+SELECT ActivityDate, 
+	CASE 
+		WHEN DayOfWeek = 'Monday' THEN 'Weekday'
+		WHEN DayOfWeek = 'Tuesday' THEN 'Weekday'
+		WHEN DayOfWeek = 'Wednesday' THEN 'Weekday'
+		WHEN DayOfWeek = 'Thursday' THEN 'Weekday'
+		WHEN DayOfWeek = 'Friday' THEN 'Weekday'
+		ELSE 'Weekend' 
+	END AS WeekType
+FROM
+	(SELECT *, DATENAME(weekday, ActivityDate) AS DayOfWeek
+	FROM DailyActivity) as t;
+
+-- Looking at average time to fall asleep during the week:
+
+SELECT DATENAME(weekday, SleepDay) AS DayOfWeek, AVG(TotalMinutesAsleep) AS AvgMinutesAsleep, AVG(TotalMinutesAsleep / 60) AS AvgHoursAsleep, AVG(TotalTimeInBed - TotalMinutesAsleep) AS AvgTimeToFallAsleep
+FROM SleepLog
+GROUP BY DATENAME(weekday, SleepDay)
+ORDER BY AvgHoursAsleep;
+
+-- 
