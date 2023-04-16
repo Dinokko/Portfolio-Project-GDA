@@ -48,14 +48,14 @@ FROM SleepLog;
 
 -- Rename SleepLog table and then give SleepLog2 table SleepLog name:
 
-EXEC SP_RENAME 'SleepLog', 'DeletedTable';
+EXEC SP_RENAME 'SleepLog', 'DeletedTable'
 EXEC SP_RENAME 'SleepLog2', 'SleepLog';
 # Renames SleepLog to DeletedTable and SleepLog2 to SleepLog
 
 -- Delete DeletedTable:
 
 DROP TABLE IF EXISTS SleepLog2;
-# Deletes table
+# Deletes table;
 
 -- Checking DailyActivity for zero step days:
 
@@ -64,21 +64,21 @@ FROM (
 	SELECT COUNT(*) AS ZeroDays
 	FROM DailyActivity
 	WHERE TotalSteps = 0
-) AS t
+) AS t;
 # Returned 77 entries
 
 -- Checking other categories of days which had zero steps counted:
 
 SELECT *, ROUND((SedentaryMinutes / 60), 2) AS SedentaryHours
 FROM DailyActivity
-WHERE TotalSteps = 0
+WHERE TotalSteps = 0;
 # Returned many entries with 24 hours of no activity. Most likely due to the FitBit not being worn.
 
 -- Removing 0 step day rows from the table:
 
 DELETE 
 FROM DailyActivity
-WHERE TotalSteps = 0
+WHERE TotalSteps = 0;
 # Removed 77 rows
 
 -- Updating Boolean values in WeightLogInfo to True/False:
@@ -89,12 +89,12 @@ ALTER COLUMN IsManualReport varchar(255);
 
 UPDATE WeightLogInfo
 SET IsManualReport = 'True'
-WHERE IsManualReport = '1'
+WHERE IsManualReport = '1';
 # Changes 1 to True
 
 UPDATE WeightLogInfo
 SET IsManualReport = 'False'
-WHERE IsManualReport = '0'
+WHERE IsManualReport = '0';
 # Changes 0 to False
 
 -- Checking length of Id column in DailyActivity to ensure no Id's are longer or less than 10 characters:
@@ -102,7 +102,7 @@ WHERE IsManualReport = '0'
 SELECT Id
 FROM DailyActivity
 WHERE LEN(Id) < 10
-OR LEN(Id) > 10
+OR LEN(Id) > 10;
 # Returned none
 
 -- Checking length of Id column in WeightLogInfo to ensure no Id's are longer or less than 10 characters:
@@ -110,7 +110,7 @@ OR LEN(Id) > 10
 SELECT Id
 FROM WeightLogInfo
 WHERE LEN(Id) < 10
-OR LEN(Id) > 10
+OR LEN(Id) > 10;
 # Returned none
 
 -- Checking length of Id column in SleepLog to ensure no Id's are longer or less than 10 characters:
@@ -118,9 +118,29 @@ OR LEN(Id) > 10
 SELECT Id
 FROM SleepLog
 WHERE LEN(Id) < 10
-OR LEN(Id) > 10
+OR LEN(Id) > 10;
 # Returned none
 
--- 
+-- Left join the 3 tables:
 
+SELECT *
+FROM DailyActivity AS d 
+LEFT JOIN SleepLog AS s
+ON d.ActivityDate = s.SleepDay AND d.Id = s.Id
+LEFT JOIN WeightLogInfo AS w
+ON s.SleepDay = w.Date AND s.Id = w.Id
+ORDER BY d.Id, Date;
 
+-- Compare total steps to amount of time asleep:
+
+SELECT d.Id, ActivityDate, TotalSteps, TotalMinutesAsleep
+FROM DailyActivity AS d
+JOIN SleepLog AS s
+ON d.Id = s.Id AND ActivityDate = SleepDay
+
+-- Compare total steps in miles to amount of time asleep:
+
+SELECT d.Id, ActivityDate, TotalMinutesAsleep, TotalSteps / 2000 AS DistanceTravelledMiles
+FROM DailyActivity AS d
+JOIN SleepLog AS s
+ON d.Id = s.Id AND ActivityDate = SleepDay
