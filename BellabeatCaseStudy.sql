@@ -179,4 +179,10 @@ FROM DailyActivity AS d
 JOIN SleepLog AS s
 ON d.Id = s.Id AND ActivityDate = SleepDay
 
--- 
+-- Calculating average steps, distance and calories:
+
+SELECT DATENAME(weekday, ActivityDate) AS DayOfWeek, AVG(CAST(TotalSteps as numeric)) AS AvgSteps, AVG(CAST(TotalDistance as numeric)) AS AvgDistance, AVG(CAST(Calories as numeric)) AS AvgCalories
+FROM DailyActivity
+GROUP BY DATENAME(weekday, ActivityDate)
+
+
