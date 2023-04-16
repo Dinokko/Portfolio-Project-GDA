@@ -172,4 +172,11 @@ FROM SleepLog
 GROUP BY DATENAME(weekday, SleepDay)
 ORDER BY AvgHoursAsleep;
 
+-- Comparing sedentary minutes to time asleep:
+
+SELECT d.Id, SedentaryMinutes, TotalMinutesAsleep
+FROM DailyActivity AS d
+JOIN SleepLog AS s
+ON d.Id = s.Id AND ActivityDate = SleepDay
+
 -- 
