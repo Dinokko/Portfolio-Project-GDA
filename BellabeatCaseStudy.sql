@@ -227,5 +227,15 @@ FROM DailyActivity AS d
 JOIN SleepLog AS s
 ON d.Id = s.Id AND ActivityDate = SleepDay;
 
+-- Looking at calories vs. active distance:
 
+SELECT Calories, LightActiveDistance, ModeratelyActiveDistance, VeryActiveDistance
+FROM DailyActivity
+
+-- Looking at sleep vs. active distance:
+
+SELECT TotalMinutesAsleep, LightActiveDistance, ModeratelyActiveDistance, VeryActiveDistance
+FROM DailyActivity AS d
+JOIN SleepLog AS s
+ON d.Id = s.Id AND ActivityDate = SleepDay;
 
