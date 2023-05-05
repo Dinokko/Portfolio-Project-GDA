@@ -215,5 +215,10 @@ JOIN SleepLog AS s
 ON d.Id = s.Id AND ActivityDate = SleepDay
 GROUP BY DATENAME(weekday, ActivityDate);
 
+-- Looking at distance vs. calories burned:
+
+SELECT TotalDistance, Calories
+FROM DailyActivity
+
 
 
