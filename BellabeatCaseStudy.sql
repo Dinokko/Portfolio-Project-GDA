@@ -220,5 +220,12 @@ GROUP BY DATENAME(weekday, ActivityDate);
 SELECT TotalDistance, Calories
 FROM DailyActivity
 
+-- Looking at sleep vs. active minutes:
+
+SELECT TotalMinutesAsleep, LightlyActiveMinutes, FairlyActiveMinutes, VeryActiveMinutes
+FROM DailyActivity AS d
+JOIN SleepLog AS s
+ON d.Id = s.Id AND ActivityDate = SleepDay;
+
 
 
