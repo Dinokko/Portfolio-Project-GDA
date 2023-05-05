@@ -138,9 +138,9 @@ FROM DailyActivity AS d
 JOIN SleepLog AS s
 ON d.Id = s.Id AND ActivityDate = SleepDay
 
--- Compare total steps in miles to amount of time asleep:
+-- Compare amount of sleep to distance travelled:
 
-SELECT d.Id, ActivityDate, TotalMinutesAsleep, TotalSteps / 2000 AS DistanceTravelledMiles
+SELECT d.Id, ActivityDate, TotalMinutesAsleep, TotalDistance
 FROM DailyActivity AS d
 JOIN SleepLog AS s
 ON d.Id = s.Id AND ActivityDate = SleepDay
@@ -172,17 +172,17 @@ FROM SleepLog
 GROUP BY DATENAME(weekday, SleepDay)
 ORDER BY AvgHoursAsleep;
 
--- Comparing sedentary minutes to time asleep:
+-- Comparing time asleep to sedentary minutes:
 
-SELECT d.Id, SedentaryMinutes, TotalMinutesAsleep
+SELECT d.Id, TotalMinutesAsleep, SedentaryMinutes
 FROM DailyActivity AS d
 JOIN SleepLog AS s
 ON d.Id = s.Id AND ActivityDate = SleepDay;
 
--- Calculating average steps, distance and calories:
+-- Calculating average steps, and calories:
 
-SELECT DATENAME(weekday, ActivityDate) AS DayOfWeek, AVG(CAST(TotalSteps as numeric)) AS AvgSteps, AVG(TotalSteps / 2000) AS AvgDistanceMiles, AVG(CAST(Calories as numeric)) AS AvgCalories
+SELECT DATENAME(weekday, ActivityDate) AS DayOfWeek, AVG(CAST(TotalSteps as numeric)) AS AvgSteps, AVG(CAST(Calories as numeric)) AS AvgCalories
 FROM DailyActivity
 GROUP BY DATENAME(weekday, ActivityDate);
 
-
+-- Calculating 
