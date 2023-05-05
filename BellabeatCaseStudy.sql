@@ -185,4 +185,19 @@ SELECT DATENAME(weekday, ActivityDate) AS DayOfWeek, AVG(CAST(TotalSteps as nume
 FROM DailyActivity
 GROUP BY DATENAME(weekday, ActivityDate);
 
--- Calculating 
+-- Looking at total time asleep vs. steps:
+
+SELECT d.Id, TotalMinutesAsleep, TotalSteps
+FROM DailyActivity AS d
+JOIN SleepLog AS s
+ON d.Id = s.Id AND ActivityDate = SleepDay;
+
+-- Looking at day of week vs. average hours asleep and average time to fall asleep:
+
+SELECT DATENAME(weekday, ActivityDate) AS DayOfWeek, AVG(CAST(TotalMinutesAsleep / 60 as numeric)) AS AvgHoursAsleep, AVG(CAST(TotalTimeInBed as numeric)) - AVG(CAST(TotalMinutesAsleep as numeric)) AS AvgTimeToFallAsleep
+FROM DailyActivity AS d
+JOIN SleepLog AS s
+ON d.Id = s.Id AND ActivityDate = SleepDay
+GROUP BY DATENAME(weekday, ActivityDate);
+
+
