@@ -179,6 +179,12 @@ FROM DailyActivity AS d
 JOIN SleepLog AS s
 ON d.Id = s.Id AND ActivityDate = SleepDay;
 
+-- Looking at sedentary minutes vs. day of week:
+
+SELECT DATENAME(weekday, ActivityDate) AS DayOfWeek, AVG(CAST(SedentaryMinutes as numeric)) As AvgSedentaryMinutes
+FROM DailyActivity
+GROUP BY DATENAME(weekday, ActivityDate);
+
 -- Calculating average steps, and calories:
 
 SELECT DATENAME(weekday, ActivityDate) AS DayOfWeek, AVG(CAST(TotalSteps as numeric)) AS AvgSteps, AVG(CAST(Calories as numeric)) AS AvgCalories
@@ -242,11 +248,5 @@ ON d.Id = s.Id AND ActivityDate = SleepDay;
 -- Looking at total steps vs. day of week:
 
 SELECT DATENAME(weekday, ActivityDate) AS DayOfWeek, AVG(CAST(TotalSteps as numeric)) As AvgSteps
-FROM DailyActivity
-GROUP BY DATENAME(weekday, ActivityDate);
-
--- Looking at sedentary minutes vs. day of week:
-
-SELECT DATENAME(weekday, ActivityDate) AS DayOfWeek, AVG(CAST(SedentaryMinutes as numeric)) As AvgSedentaryMinutes
 FROM DailyActivity
 GROUP BY DATENAME(weekday, ActivityDate);
