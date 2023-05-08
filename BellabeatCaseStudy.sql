@@ -207,7 +207,7 @@ FROM DailyActivity AS d
 JOIN SleepLog AS s
 ON d.Id = s.Id AND ActivityDate = SleepDay;
 
--- Looking at day of week vs. average distance and average calories burned:
+-- Looking at average distance and average calories burned vs. day of week:
 
 SELECT DATENAME(weekday, ActivityDate) AS DayOfWeek, AVG(CAST(TotalDistance as numeric)) As AvgDistance, AVG(CAST(Calories as numeric)) AS AvgCaloriesBurned
 FROM DailyActivity AS d
@@ -239,3 +239,14 @@ FROM DailyActivity AS d
 JOIN SleepLog AS s
 ON d.Id = s.Id AND ActivityDate = SleepDay;
 
+-- Looking at total steps vs. day of week:
+
+SELECT DATENAME(weekday, ActivityDate) AS DayOfWeek, AVG(CAST(TotalSteps as numeric)) As AvgSteps
+FROM DailyActivity
+GROUP BY DATENAME(weekday, ActivityDate);
+
+-- Looking at sedentary minutes vs. day of week:
+
+SELECT DATENAME(weekday, ActivityDate) AS DayOfWeek, AVG(CAST(SedentaryMinutes as numeric)) As AvgSedentaryMinutes
+FROM DailyActivity
+GROUP BY DATENAME(weekday, ActivityDate);
